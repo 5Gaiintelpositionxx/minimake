@@ -2,20 +2,31 @@ name: Test minimake
 
 on:
   push:
-    branches: [ "master" , "main" ]
+    branches: [ "master", "main" ]
   pull_request:
-    branches: [ "master" , "main" ]
+    branches: [ "master", "main" ]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
+
+    - name: Set executable permissions
+      run: |
+        chmod +x ./configure
+        chmod +x ./minimake
+
     - name: configure
       run: ./configure
+
     - name: check minimake
       run: if [ -f minimake ]; then echo "minimake exists"; else echo "minimake does not exist"; fi
+
+    - name: Install dependencies
+      run: |
+        pip install pytest
+
     - name: test with pytest
       run: pytest
